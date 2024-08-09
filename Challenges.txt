@@ -1,0 +1,11 @@
+//
+//  Challenges.txt
+//  LOTRConverter17
+//
+//  Created by Wayne Simmons Jr on 6/21/24.
+//
+
+Challenge 1 - Create sixth currency DONE
+Challenge 2 - Persist Currencies even afters users close and reopen app. Hint: UserDefaults DONE
+Challenge 3 - Dismiss Keyboard Hint: FocusState DONE
+Challenge 4 - Refractor Currency Conversion Section. Code for left and right currency converstion are almost the same, put them in seperate files. NOT DONE

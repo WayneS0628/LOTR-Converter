@@ -1,0 +1,373 @@
+SwiftUI learning so far !!
+
+different types of views:
+    ZStack - placing views/objects from front to back
+    VStack - placing views/objects vertically from top to bottom
+    HStack - placing views/objects horizontally from left to right
+
+modifiers (both visual and functional modifiers exist):
+    .padding or .font (visual)
+    .sheet (visual)
+    
+
+
+
+wrapping variables:
+    the concept of "wrapping" variables primarily refers to the use of property wrappers. Property
+    wrappers are a feature in Swift that allows you to add behavior to properties. They are particularly
+    useful in SwiftUI for managing state and other dynamic behaviors in your user interfaces.
+    
+    Common Property Wrappers in SwiftUI:
+        @State: Used for managing state within a view. Allows the view to mutate the state and
+        automatically update the UI when the state changes.
+        @Binding: Used for creating a two way binding between a child view and its parent. It allows a child to read and write to a value owned by the parent
+        
+        
+        
+        
+        
+        
+        
+        
+-----------------------------------------------------------
+*LESSON 8 Show and Dismiss a Screen*
+
+Agenda:
+
+- Showing a sheet
+- @Environment properties
+- How sheet really works
+
+
+
+
+Content:
+
+- make info button work
+    * Add .sheet functional modifier to button
+    * add isPresented and wrap showExchangeInfo bool in a binding using $ (&showExchangeInfo)
+    * add curly braces then add the ExchangeInfo() view
+    * Now when info button is pressed a sheet is brought up that contains our ExchangeInfo view
+
+- make done button work
+    * Add @Environment() variable in ExchnageInfo code, @Environment is A property wrapper that reads a value from a view’s environment.
+    * There are many functionalities that apple knows we're going to need so apple builds it for us so we dont have to keep building it everytime we need it. We expose those properties using @Evironment
+    * in the parenthesis we will add a path to the value or functionality we need. We start with \. to start the path and the type the keyword to the property we want to expose. we want to expose the dismiss
+    * dismiss is a dismiss action, which simply dismisses the current presentation aka the current view
+    * Now we have @Environment(\.dismiss) which is our wrapper part but we need to name the property
+    * I choose var hideInfo so altogether we have @Environment(\.dismiss) var hideInfo
+    * We use var because when exposing a property the value of the property changes depending on whether or not the view is showing, so when we dismiss a veiw it changes the view
+    * Now we simply add hideInfo() underneath button and add () so it will be hideInfo()
+    
+- how sheet works:
+    * Currently the .sheet() modifier is attached to the button but it doesnt have to be
+    * The modifier .sheet() performs its action because its watching the showExchangeInfo bool variable
+    * when the info button is clicked then it changes that bool and the .sheet() modifier sees that and shows the sheet view!
+    * You can attach that .sheet() modifier to the text field, the background image, or, as the instructor in the video lieks to do, attach it to the outer most view stack, aka the ZStack. I want to leave it at the button since its watching the very thing that the button is changing, just makes sense to me.
+-----------------------------------------------------------
+        
+        
+        
+        
+        
+        
+        
+-----------------------------------------------------------
+*Lesson 9 Laying Out Our Select Currency Screen*
+
+Agenda:
+
+- Font Weight
+- Stack alignment
+- .infinity
+- Clipshape
+- Order of modifiers
+
+
+
+
+Content:
+
+code: SelectCurrency.swift
+
+Font weight:
+    * We have different font weights
+    * In this lesson we use .caption and .bold
+
+Stack Alignment:
+    * Layering ZStacks, HStacks, and VStacks and shit
+    
+.infinity:
+    * .infinity makes an elements frame go right up to the edge of its parent view in the direction we specify which was width for us
+    * In our code our element that uses .infinity is the the text on our VStack for the currency icon selection,
+    * Our so our text has a frame that now stretches to the edges of the 100 VStack width edges
+
+Clipshape:
+    * Clipshape sets a clipping shpae for a given view
+    * In our coee we use clipshape(rect(cornerRadius: 25) because we need to set a clipping shape on our VStacks whos frame is 100 x 100
+    * we use rect(cornerRadius: 25) because the shape is a rectangle and we wanted to change the radius of the corners
+    
+Order of Modifiers:
+    * In our code if we go to the text sections under the VStack for the currency icon we see some modifiers
+    * those modifiers are layed out in a specific order
+    * Our background modifier give the background color to all of the other modifiers
+    * if the backgorund modifier was the first modifier right after the text then we wouldnt see a long line of brown we would see the brown
+    being directly behind the text only
+    * because our padding bring the height out a little and the infinity bring the fram out to the edge width of the parent view when we apply
+    brown background after them then we see a long line of brown behind the text
+-----------------------------------------------------------
+
+        
+        
+        
+      
+      
+      
+        
+        
+-----------------------------------------------------------
+*Lesson 10 Grids and Loops*
+
+Agenda:
+
+- Grid
+- Lazy
+- ForEach
+- Zero
+- Underscore
+
+
+
+Content:
+
+Grid:
+    * A container view that arranges other views in a two dimensional layout
+    * We also have LazyHGrids and LazyVGrids which is a container view that arranges its child views in a grid that grows horizontily or
+    vertically respectively, creating items only as needed.
+    * We will us a LazyVGrid today only because we need a VGrid which doesnt exist without Lazy
+
+Lazy:
+    * Lazy simply means we only loads things onto the users viewable screen as needed. For example we have a VStack for something like instagram
+    where all the posts are all vertically layed out, however, a normal VStack would load everything immediately which isnt ideal cause it would
+    make servers and users devices work harder than they need to and create potentially bad experiences. Instead a LazyVStack can be used, which
+    only loads in content that the user can see on the screen even if they can only partially see it.
+
+ForEach:
+    * structure that computes views on demand from an underlying collection of identified data
+    
+                    ForEach(0..<5){ _ in
+                        
+                    }
+                    
+Zero:
+    * Start counting from 0 because thats what real niggas do type shit
+
+Underscore:
+    * In our ForEach loop we have an "_ in"
+    * An underscore is what we use as a placeholder property name or more acurately when we dont want to name a property
+    * When a ForEach loops runs everytime it starts with a number and we can use that number in our code
+    * In our ForEach loop is starts at 0 but we dont need that 0 so the underscore tells the loop to discard the number 0
+    * Our loop then goes through the index 1 - 4 inclusively each time discarding the number
+    * We can instead type the following:
+    
+                        ForEach(0..<5){ loop in
+                            Text("We are on loop \(loop)")
+                    }
+
+    * We know have given our index property a name and its name is loop
+    * When the loop starts itll print out "We are on loop 0" which is using the number instead of discarding it
+    * It will repeat this until it gets to 4 then exit the loop
+    * So, essentially the underscore is just to have the oop ignore the number index we're on which is required by Swift UI syntax smh
+-----------------------------------------------------------
+
+
+
+
+
+
+
+-----------------------------------------------------------
+*Lesson 11 Models and Enums*
+
+Agenda:
+
+- Model
+- Enum
+- Raw Value
+
+
+
+Content:
+
+Model:
+    * Describing the structure of an object with code
+    * Similar to a blueprint or set of instructionsappsavs code
+    * Similar to building a class/ struct
+    * For example we can build a struct model called puppies and give it data memebrs like age, eye color, and breed
+    * Sometimes we dont wanna just leave string as the method of entry for something like eye colo and breed. Users can then enter anything.
+    * We wouldnt someone to enter "donut" or "apple juice" for a puppies eye color or breed in our program
+    * Instead we use enums
+Enum:
+    * Enums are another kind of model where we create specifically data types
+    * With an enum we can create a Breed enum and an EyeColor enum
+    * For the Breed enum we can specify only six breeds for example
+    * Now we can make the breed data member of type Breed instead of string
+    * Doing this restricts the users choices to only the six breeds of dogs we've defined the Breed data type to host
+Raw Value:
+    * In our currency app we can define a currency enum that only has one of the 5 currency choices and give the enum type double
+    * Now when that value is chosen in a currency struct for example then we have to know its value
+    * By default swift orders the objects in order they were created startiing form index 0
+    * We can give them our own values by using the = symbol and setting it to any number we choose
+    * so basically raw values are what would print out when you say for example Currency.silverPenny.rawValue
+-----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------
+*Lesson 12 Computed properties*
+
+Agenda:
+
+    - Computed Property
+    - Frameworks
+    - Conditionals
+    - self
+    
+
+
+
+Content:
+
+Computed Property:
+    * A property whos value is computed at the point of usage
+    * When we reuse the property the value changes
+    * In our currency.swift file our computed property is the image and name variables
+Frameworks:
+    * Basically just libraries when we say import SwiftUI that importing a framework
+    * Reason everything cant just be automatically imported and ready to use is because theres a lot of code in swift that apple created
+    * If we imported everything every single time our stuff would run slower
+Conditionals:
+    * if/else
+    * Switch/Case
+self:
+    * basically when we create an object from enum and we have a type the name and image computed properties recognize that and automatically
+    assign it the neecessary name and image
+    * so if we created an object from the enum and gave it type .silverPenny then it would be given the computed property "Silver Penny" as the name
+    and the image .silverpenny
+-----------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------
+*Lesson 13 Arrays*
+
+Agenda:
+
+    - Collection
+    - Array
+    - CaseIterable
+    - Identifiable
+
+
+
+
+Content:
+
+Collections:
+    * Collections are a way to organize or collect many property values into one area or preoprty to use to access the collection
+    * For example a currency app would have to include the 180 different real world currencies
+    * In this case it would be ncie to collect and stroe the currencies in one area so thetyre not all over the place and so that we could use them
+    * There are three main collection types in swift, Array, Dictionary, and Set. There are more but in other frameworks
+Array:
+    * You know what an array is already bro, or do you?
+    * An ordered collection of things of the same type
+    * Dont have to define a size in swift, just type var and give it a name = [items in here]
+    * Arrays behave like vectors in swift so no size specification and dynamic memory allocation
+    * So var arrayName = [] creates an empty array you can add and remove from
+    * Arrays are still indexed from 0
+CaseIterable:
+    * A type that provides a collections of all of its values
+    * We can use this to turn our currency enum into an array
+    * That way we can loop through it
+Identifiable:
+    * In our for each loop, when typing Currency.allCases we get an error that says "Referencing initializer 'init(_:content:)' on 'ForEach' requires that 'Currency' conform to 'Identifiable'"
+    * Identifiable is a class of types whose instances hold the value of an entity with stable identity
+    * Swift requires it but still not sure what different things it will be used for
+    * but we have to go to our enum and add Identifiables
+    * Then we have to make a 'var id: ' in the enum
+    * For our enum we can put 'var id: Double {rawValue}' or we can say 'var id: Currency {self}'
+    * As you can see, we can use either our double raw values as the identifiable value or the currency self's as the identifiables raw values
+    * We apparently will never use the id's ourselves but the for loop will in the background
+ -----------------------------------------------------------
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+-----------------------------------------------------------
+ *Lesson 14 Make Icon Grid tappable*
+ 
+ Agenda:
+ 
+    - New Modifiers
+    - Scope
+    - Tap Gesture
+    
+
+
+
+Content:
+
+New Modifiers:
+
+Scope:
+    * Scope is like a circle of awareness
+    * Every thing in our project, every line of code, file, and framework has a certain scope thats it's aware of or has access to
+    * In out selectCurrency.swift code we have currency as an @Satet var of type Currency but also as an identifier in the for each loop
+    * When comparing the ccurrency to currency using currency == currency in the if statesment within the for loop, swift will comprae the currency in the loop to the currency in the loop since thats the closest scope
+    * If we want this to change we just use self.currency to let swift know to use the currency property outside the for loop or we can give our variable of type Currency a different name
+Tap:
+    *   .onTapGesture {
+            self.currency = currency
+        }
+-----------------------------------------------------------
+ *Lesson 15 Icon Grid*
+
+Agenda:
+
+    - IconGrid view
+    - Add currencies to ContentView
+    - Show SelectCurrency view
+
+
+
+
+
+Content:
+
+
+
+
+
+
+
+-----------------------------------------------------------
+
+-----------------------------------------------------------
